@@ -110,31 +110,3 @@ class Subject:
             self.questions.append(question)
             return True
         return False
-
-
-# question1 = "What is 1 + 1"
-# choices = [1, 3, 2, 4]
-# question2 = "What is the symbol of oxygen"
-# choices1 = ["CO2", "H20", "02", "C"]
-# student = Student('nakatude', 1)
-# # print(student.level)
-# quize1 = Quize('Math')
-# quize2 = Quize('Chem')
-# quest = Question(question1)
-# quest.add_choices(choices)
-# print(quest.choices)
-# quest2 = Question(question2)
-# quest2.add_choices(choices1)
-# quize1.add_question(quest)
-# quize2.add_question(quest2)
-# T = Teacher('james', 1)
-# T.add_quize(quize1)
-# T.add_quize(quize2)
-# T.add_my_student(student)
-# T.assign_quize(student, quize1)
-
-# for q in student.exercises:
-#     for j in q.questions:
-#         answer = input(j.question + " > ")
-#         j.answer_me(answer)
-#         print(j.answer)
