@@ -1,6 +1,3 @@
-from controller.check_exit import validate_student_data
-
-
 class Student:
     instances = []
 
@@ -33,7 +30,7 @@ class Teacher:
         self.students = []
         self.instances.append(self)
 
-    def add_quize(self, quize):
+    def add_quiz(self, quize):
         if quize:
             for exercise in self.exercises:
                 if exercise.subject == quize.subject:
@@ -87,7 +84,7 @@ class Teacher:
                     return exercise.total_score
         else:
             print('No students with such a name')
-    
+
     def get_semester_result(self, semester):
         students = [student for student in self.students if student.semester == semester]  # noqa
         return students
@@ -119,7 +116,7 @@ class Question:
             self.submitted = True
 
 
-class Subject:
+class Quiz:
 
     def __init__(self, subject):
         self.subject = subject
