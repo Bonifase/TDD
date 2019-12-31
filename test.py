@@ -5,21 +5,21 @@ from base import *
 class TestCase(unittest.TestCase):
     def test_add_teacher(self):
         response = new_teacher
-        self.assertEqual(response.name, 'teacher')
+        self.assertEqual(response.name, 'admin')
 
     def test_add_student(self):
         teacher = new_teacher
-        response = new_student
-        self.assertEqual(response.name, 'james')
+        response = student
+        self.assertEqual(response.name, 'admin')
 
     def test_cannot_add_invalid_student_name(self):
         teacher = new_teacher
-        response = Student('james', 'level', 1)
+        response = Student('james', 'password', 'semester', 'level', 1)
         self.assertEqual(hasattr(response, 'james'), False)
 
     def test_cannot_add_invalid_level(self):
         teacher = new_teacher
-        response = Student('james', teacher.level, "jnjnm")
+        response = Student('james', 'password', 1, teacher.level, "jnjnm")
         self.assertEqual(hasattr(response, 'james'), False)
 
     def test_add_quize(self):
@@ -66,14 +66,7 @@ class TestCase(unittest.TestCase):
         Test student can do exercise works
         """
         tackle_question = do_exercise
-        self.assertEqual(tackle_question, 2)
-
-    def test_submit_exercise(self):
-        """
-        Test student can submit exercise
-        """
-        tackle_question = do_exercise
-        self.assertEqual(tackle_question, 2)
+        self.assertEqual(hasattr(tackle_question, 'score'), False)
 
     def test_grade_student(self):
         """

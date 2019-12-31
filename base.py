@@ -1,17 +1,26 @@
-from objects import *
-
-new_teacher = Teacher('teacher', 1)
-new_student = Student('james', new_teacher.level, 1)
-subject = Subject()
-new_subject = subject.add_subject('Math')
+from models.models import *
+from controller.validate import *
+user = dict(name='admin', password='A1234', level=1, semester=1)
+name = validata_user_string_value('teacher', user.get('name'))
+password = validate_user_password(user.get('password'))
+level = validata_user_int_value('level', user.get('level'))
+semester = validate_semester_value(user.get('semester'))
+new_teacher = Teacher(name, password, level)
+student = Student(name, password, new_teacher.level, semester, 1)
+new_subject = Subject('Math')
+# new_subject = subject.add_subject('Math')
+# subject = validata_user_string_value(subject)
 new_question = Question('What is 1 + 1', 2,  new_subject.subject)
 new_choices = new_question.add_choices([1, 2, 3, 4])
-add_question = subject.add_question(new_question)
+new_subject.questions.append(new_question)
 unlimited_choices = new_question.add_choices([1, 2, 3, 4, 3, 2, 4])
-new_exercise = new_teacher.add_quize(subject)
-my_student = new_teacher.add_my_student(new_student)
+new_exercise = new_teacher.add_quize(new_subject)
+my_student = new_teacher.add_my_student(student)
 assign_student_question = new_teacher.add_exercise_to_student(
-    new_student, subject)
-do_exercise = new_student.do_exercise(subject.subject, 2)
-submit_exercise = new_student.submitted
-grade_student = new_teacher.grade_student(new_student, new_subject.subject)
+    student.name, new_subject)
+do_exercise = student.start_exercise(new_subject.subject)
+answer = 2
+do_question = student.exercises[0].questions[0].answer_me(answer)
+grade_student = new_teacher.grade_student(student, new_subject)
+# print(new_teacher.get_student_exercises('james', 'Math'))
+
