@@ -1,11 +1,20 @@
+import time
 from models.models import *
 from controller.helpers import *
 from controller.validate import *
 
 print('\n')
-print('NOTE: To exit the program type exit\n')
+welcome = ['Welcome ', 'to ', 'classroom ', 'management','system. ', 'Follow ', 'the ', 'instructions ', 'to ', 'proceed.\n']
+for item in welcome:
+   print(item.upper(), end=" ", flush=True)
+   time.sleep(0.4)
+inst = ['NOTE:', 'To', 'exit', 'the', 'program', 'type', 'exit\n']
+for item in inst:
+   print(item.upper(), end=" ", flush=True)
+   time.sleep(0.4)
+print()
 name = input(
-    'To setup your classroom, type in your name:  \n')
+    ('To setup your classroom, type in your name:  \n').upper())
 check_exit(name)
 name = validate_user_string_value('Enter name of teacher: \n', name)
 password = input('Enter Password: \n')
