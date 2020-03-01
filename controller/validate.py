@@ -1,6 +1,6 @@
 import re
-from models.models import *
-from controller.helpers import check_exit
+# from models.models import *
+# from controller.helpers import check_exit
 
 
 def validate_user_password(password):
@@ -9,49 +9,48 @@ def validate_user_password(password):
     Ensures that user enter a strong password.
     """
     if len(password) < 5 and len(password) < 10:
-        print("Make sure your password is at least 5 letters and less than 10 letters")  # noqa
-        password = input('Enter password again: \n')
-        return validate_user_password(password)
+        raise ValueError("Make sure your password is at least 5 letters and less than 10 letters")  # noqa
     elif re.search('[0-9]', password) is None:
-        print("Make sure your password has a number in it")
-        password = input('Enter password again: \n')
-        return validate_user_password(password)
-    elif re.search('[A-Z]', password) is None: 
-        print("Make sure your password has a capital letter in it")
-        password = input('Enter password again: \n')
-        return validate_user_password(password)
-    else:
-        return password
+        raise ValueError("Make sure your password has a number in it")
+    elif re.search('[A-Z]', password) is None:
+        raise ValueError("Make sure your password has a capital letter in it")
+
+    return True
+# client code :
+# user_input = ''
+# ADD THIS PURELY FOR THE CLI
+def get_user_input(input_message, validator_fn):
+    try:
+        user_input = input(input_message)
+        validator_fn(user_input)
+    except ValueError as e:
+        print(e)
+        user_input = get_user_input(input_message, validator_fn)
+
+    return user_input  # this is a valid user input 
 
 
-def validate_user_string_value(identifier, value):
+def validate_user_string_value(value):
     """
     Validates string values.
     Ensures that user enter a string value where string
     inputs are required.
     Returns a string value
     """
-    if value.isdigit():
-        print('Type not allowed.')
-        value = input(
-                'Type in {} again:  \n'.format(identifier))
-        return validate_user_string_value(identifier, value)
-    elif len(value) < 3:
-        print('Too short, Enter at least three characters.')
-        value = input(
-                    'Type in {} again:  \n'.format(identifier))
-        return validate_user_string_value(identifier, value)
-
+    name_length = 3
+    if len(value) < name_length:
+        raise ValueError('User name must contain more than three characters')
     elif not isinstance(value, str):
-        print('Only string values are allowed.')
-        value = input(
-                'Type in {} again:  \n'.format(identifier))
-        return validate_user_string_value(identifier, value)
-    else:
-        return value
+        raise ValueError('Only string values are allowed.')
+    elif not value.isalnum():
+        raise ValueError('Must be a string')
+    elif value.isdigit():
+        raise ValueError('Must be a string')
+
+    return True
 
 
-def validate_user_int_value(identity, value):
+def validate_user_level_value(value):
     """
     Validates integer values.
     Ensures that user enter an interger value where integer
@@ -59,18 +58,16 @@ def validate_user_int_value(identity, value):
     Returns an integer value
     """
     value = str(value)
+    allowed_levels = [1, 2, 3]
     if len(value) > 0:
         if not value.isdigit():
-            print('Only integer values are allowed.')
-            value = input('Type in {} again:  \n'.format(identity))
-            return validate_user_int_value(identity, value)
-        return int(value)
+            raise ValueError('Only integer values are allowed.')
+        if int(value) not in allowed_levels:
+            raise ValueError('Level not allowed')
+        return True
     else:
-        print('Too short, Enter a value.')
-        value = input('Type in {} again:  \n'.format(identity))
-        return validate_user_int_value(identity, value)
-
-
+        raise ValueError('Too short, Enter a value.')
+        
 def validate_total_items(identity, value):
     """
     Limits the number of items to be created.
@@ -111,7 +108,7 @@ def validate_total_items(identity, value):
             return value
 
 
-def validate_semester_value(identity, value):
+def validate_semester_value(value):
     """
     validates semester
     Ensures that user enter only allowed semester values
@@ -119,40 +116,38 @@ def validate_semester_value(identity, value):
     """
     allowed_semesters = [1, 2, 3]
     if value in allowed_semesters:
-        return value
+        return True
     else:
-        if identity == 'semester':
-            print('Enter integer value between 1-3.')
-            value = input('Enter a valid semester value: \n')
-            value = validate_user_int_value(identity, value)
-            return validate_semester_value(identity, value)
-        else:
-            print('Enter integer value between 1-3.')
-            value = input('Enter a valid level value: \n')
-            value = validate_user_int_value(identity, value)
-            return validate_semester_value(identity, value)
+        raise ValueError('Enter integer value between 1-3.')
+        value = input('Enter a valid semester value: \n')
+        value = validate_user_int_value(identity, value)
+        return validate_semester_value(identity, value)
         
 
-def validate_question(identity, value):
-    """
-    validates question
-    Ensures that user enter a meaningful question
-    """
-    if identity == 'question':
+class ValidateQuestion:
+
+    def validate_question(value):
+        """
+        validates question
+        Ensures that user enter a meaningful question
+        """
+        question_length = 4
         if len(value) < 4 or value.isspace():
             print('Please enter some value.')
             value = input('Enter a valid question value: \n')
             return validate_question(identity, value)
         else:
             return value
-    elif identity == 'answer':
+
+    def validate_answer(value):
         if len(value) == 0 or value.isspace():
             print('Please enter some value.')
             value = input('Enter a valid answer value: \n')
             return validate_question(identity, value)
         else:
             return value
-    elif identity == 'choice':
+            
+    def validate_choice(value):
         if len(value) == 0 or value.isspace():
             print('Please enter some value.')
             value = input('Enter a valid choice value: \n')

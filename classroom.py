@@ -11,21 +11,18 @@ for item in welcome:
 inst = ['NOTE:', 'To', 'exit', 'the', 'program', 'type', 'exit\n']
 for item in inst:
    print(item.upper(), end=" ", flush=True)
-   time.sleep(0.4)
+   time.sleep(0.1)
 print()
-name = input(
-    ('To setup your classroom, type in your name:  \n').upper())
+name = get_user_input(('To setup your classroom, type in your name:  \n').upper(), validate_user_string_value)
 check_exit(name)
-name = validate_user_string_value('Enter name of teacher: \n', name)
-password = input('Enter Password: \n')
+password = get_user_input('Enter Password: \n', validate_user_password)
 check_exit(password)
-password = validate_user_password(password)
-level = input(
-    '\033[92m Nice {}! Enter class level:\033[00m  \n'.format(name))
+
+level = get_user_input(
+    '\033[92m Nice {}! Enter class level:\033[00m  \n'.format(name), validate_user_level_value)
 check_exit(level)
-level = validate_user_int_value('level', level)
-level = validate_semester_value('level', level)
 teacher = Teacher(name, password, level)
+
 enter = input(
     '\033[92m Hello {}, press ENTER to add students \033[00m \n'.format(teacher.name))
 check_exit(enter)
